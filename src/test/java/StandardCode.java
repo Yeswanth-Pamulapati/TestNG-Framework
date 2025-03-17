@@ -26,10 +26,6 @@ public class StandardCode {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(ofSeconds(10));
         UserLoginPage userLoginPage = new UserLoginPage(driver);
-        ProductCatalogue productCatalogue = new ProductCatalogue(driver);
-        CartPage cartPage = new CartPage(driver);
-        PaymentPage paymentPage = new PaymentPage(driver);
-        OrderConfirmationPage confirmationPage = new OrderConfirmationPage(driver);
         FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")+"/src/test/Resources/Global.properties");
         Properties properties = new Properties();
         properties.load(fileInputStream);
@@ -37,14 +33,15 @@ public class StandardCode {
         //Go to Website
         userLoginPage.goTo();
         //Login into the application
-        userLoginPage.loginApplication(properties.getProperty("username"),properties.getProperty("password"));
+        ProductCatalogue productCatalogue = userLoginPage.loginApplication(properties.getProperty("username"),properties.getProperty("password"));
         //Add products to cart
         productCatalogue.addProductToCart("ZARA COAT 3");
         //click on the cart button and open the cart page
-        productCatalogue.clickTheCart();
+        CartPage cartPage = productCatalogue.clickTheCart();
         //verify products on cart page.
-        cartPage.verifyTheProductsInCart("ZARA COAT 3");
-        cartPage.clickTheCheckoutButton();
+        Boolean productMatch = cartPage.verifyTheProductsInCart("ZARA COAT 3");
+        Assert.assertTrue(productMatch);
+        PaymentPage paymentPage = cartPage.clickTheCheckoutButton();
 //        driver.findElement(By.cssSelector("input[placeholder=\"Select Country\"]")).sendKeys("united");
 //        List<WebElement> countyList = driver.findElements(By.cssSelector(".ta-results span"));
 //        WebElement countryToSelect = countyList.stream().filter(country->country.getText().equalsIgnoreCase("United Arab Emirates")).findFirst().orElse(null);
@@ -54,9 +51,10 @@ public class StandardCode {
         //select required country
         paymentPage.selectADesiredCountryFromDropdown();
         //place the order
-        paymentPage.placeTheOrder();
+        OrderConfirmationPage confirmationPage = paymentPage.placeTheOrder();
         //verify the confirmation message displayed on the final page.
-        confirmationPage.verifyTheConfirmationMessage("Thankyou for the order.");
+        Boolean messageMatch = confirmationPage.verifyTheConfirmationMessage("Thankyou for the order.");
+        Assert.assertTrue(messageMatch);
 
 
 

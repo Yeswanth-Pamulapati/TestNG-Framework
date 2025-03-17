@@ -26,10 +26,12 @@ public class UserLoginPage extends Utils {
         WebElement loginButton;
 
 
-    public void loginApplication(String userEmail, String userPassword){
+    public ProductCatalogue loginApplication(String userEmail, String userPassword){
         username.sendKeys(userEmail);
         password.sendKeys(userPassword);
         loginButton.click();
+        ProductCatalogue productCatalogue = new ProductCatalogue(driver);
+        return productCatalogue;
 
     }
 

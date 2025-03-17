@@ -20,8 +20,8 @@ public class OrderConfirmationPage extends Utils {
     @FindBy(css = ".hero-primary")
     WebElement ActualMessage;
 
-    public void verifyTheConfirmationMessage(String ExpectedMessage){
-        Assert.assertTrue(ActualMessage.getText().equalsIgnoreCase(ExpectedMessage));
+    public Boolean verifyTheConfirmationMessage(String ExpectedMessage){
+    	return ActualMessage.getText().equalsIgnoreCase(ExpectedMessage);
     }
 
 }

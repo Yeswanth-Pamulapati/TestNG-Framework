@@ -36,8 +36,10 @@ public class PaymentPage extends Utils {
         actions.moveToElement(countryToSelect).click().build().perform();
     }
 
-    public void placeTheOrder(){
+    public OrderConfirmationPage placeTheOrder(){
         placeOrderButtonLocator.click();
+        OrderConfirmationPage confirmationPage = new OrderConfirmationPage(driver);
+        return confirmationPage;
     }
 }
 

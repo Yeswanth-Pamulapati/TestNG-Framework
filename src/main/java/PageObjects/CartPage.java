@@ -31,13 +31,15 @@ public class CartPage extends Utils {
         return productsInCart;
     }
 
-    public void verifyTheProductsInCart(String productName){
+    public Boolean verifyTheProductsInCart(String productName){
        Boolean isProductMatching = getProductsInCart().stream().anyMatch(product->product.findElement(productNameLocator).getText().equals(productName));
-       Assert.assertTrue(isProductMatching);
+       return isProductMatching;
     }
 
-    public void clickTheCheckoutButton(){
+    public PaymentPage clickTheCheckoutButton(){
         checkoutButtonLocator.click();
+        PaymentPage paymentPage = new PaymentPage(driver);
+        return paymentPage;
     }
 }
 

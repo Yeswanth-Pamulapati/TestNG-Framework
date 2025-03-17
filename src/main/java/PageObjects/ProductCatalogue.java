@@ -21,8 +21,7 @@ public class ProductCatalogue extends Utils {
     @FindBy(css = ".mb-3")
     List<WebElement> products;
 
-    @FindBy(css = ".fa-shopping-cart" )
-    WebElement cartButtonLocator;
+   
     By productsLocator = By.cssSelector(".mb-3");
     By productNameLocator= By.tagName("b");
 
@@ -45,9 +44,7 @@ public class ProductCatalogue extends Utils {
         waitUntilElementIsInvisible(toastMessage);
     }
 
-    public void clickTheCart(){
-            cartButtonLocator.click();
-    }
+   
 
 
 
