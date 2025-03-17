@@ -1,0 +1,4 @@
+1)In a pageObject Model, a page object file should not contain any data
+2)PageObjects.initElements() used to tell the FindBy() annotation where to find the driver.
+    i)initElements() expects two arguments which are driver and "this" keyword.
+    ii)This key word represents the current instance or page.
