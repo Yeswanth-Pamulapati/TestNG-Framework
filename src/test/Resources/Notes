@@ -2,3 +2,6 @@
 2)PageObjects.initElements() used to tell the FindBy() annotation where to find the driver.
     i)initElements() expects two arguments which are driver and "this" keyword.
     ii)This key word represents the current instance or page.
+30 Page Objects contains locators and action methods which perform actions on a particular page.    
+3)Do not write assert statement within the page objects as we might be changing the assertion type from false to true or vice versa
+when required, so it is recommended to write assertions in test case class not page objects.   

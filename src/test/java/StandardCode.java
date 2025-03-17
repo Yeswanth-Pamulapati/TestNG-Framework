@@ -1,4 +1,5 @@
 import PageObjects.*;
+import TestComponents.BaseTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,22 +20,15 @@ import java.util.Properties;
 
 import static java.time.Duration.ofSeconds;
 
-public class StandardCode {
-    public static void main(String[] args) throws IOException {
+public class StandardCode extends BaseTest {
+    @Test 
+    public void submitOrder() throws IOException
+    {
         //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\src\\test\\Resources\\msedgedriver.exe");
-        WebDriverManager.edgedriver().setup();
-        WebDriver driver = new EdgeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(ofSeconds(10));
-        UserLoginPage userLoginPage = new UserLoginPage(driver);
-        FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")+"/src/test/Resources/Global.properties");
-        Properties properties = new Properties();
-        properties.load(fileInputStream);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(8));
+    	UserLoginPage userLoginPage = launchApplcation();
         //Go to Website
-        userLoginPage.goTo();
         //Login into the application
-        ProductCatalogue productCatalogue = userLoginPage.loginApplication(properties.getProperty("username"),properties.getProperty("password"));
+        ProductCatalogue productCatalogue = userLoginPage.loginApplication(handleProperties().getProperty("username"),handleProperties().getProperty("password"));
         //Add products to cart
         productCatalogue.addProductToCart("ZARA COAT 3");
         //click on the cart button and open the cart page
