@@ -3,6 +3,7 @@ package Utils;
 import org.testng.Assert;
 
 import PageObjects.CartPage;
+import PageObjects.OrdersPage;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -27,6 +28,8 @@ public class Utils {
     @FindBy(css = ".fa-shopping-cart" )
     WebElement cartButtonLocator;
     
+    @FindBy(css = "button[routerlink=\"/dashboard/myorders\"]")
+    WebElement OrdersLocator;
     public void waitUntilElementIsVisible(By elementLocator){
         wait.until(ExpectedConditions.visibilityOfElementLocated(elementLocator));
 
@@ -50,6 +53,10 @@ public class Utils {
         CartPage cartPage = new CartPage(driver);
         return cartPage;
         
+}  public OrdersPage clickonOrdersHeader() {
+	    OrdersLocator.click();
+	    OrdersPage ordersPage = new OrdersPage(driver);
+	    return ordersPage;
 }
      
 

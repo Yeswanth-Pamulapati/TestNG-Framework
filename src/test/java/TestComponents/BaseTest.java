@@ -11,16 +11,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 import PageObjects.UserLoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
-	WebDriver driver;
-	FileInputStream fileInputStream;
-	Properties properties;
+	public WebDriver driver;
+	public FileInputStream fileInputStream;
+	public Properties properties;
 	String username, password;
-	
+	public UserLoginPage loginPage;
 	public Properties handleProperties() throws IOException {
 		fileInputStream = new FileInputStream(System.getProperty("user.dir")+"/src/test/Resources/Global.properties");
         properties = new Properties();
@@ -56,11 +58,18 @@ public class BaseTest {
 		return driver;
 	}
 	
+	@BeforeMethod(alwaysRun = true)
+	//this executes before every test method
 	public UserLoginPage launchApplcation() throws IOException {
 		driver = initializeDriver();
-		UserLoginPage loginPage = new UserLoginPage(driver);
+		loginPage = new UserLoginPage(driver);
 		loginPage.goTo();
 		return loginPage;
+	}
+	
+	@AfterMethod(alwaysRun = true)
+	public void tearDown() {
+		driver.quit();
 	}
 	
 	

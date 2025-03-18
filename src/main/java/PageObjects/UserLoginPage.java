@@ -24,7 +24,9 @@ public class UserLoginPage extends Utils {
         WebElement password;
     @FindBy(css = "input[name=\"login\"]")
         WebElement loginButton;
-
+    @FindBy(css = ".toast-message")
+    	WebElement InvalidEmailOrPasswordMsgLocator;
+  
 
     public ProductCatalogue loginApplication(String userEmail, String userPassword){
         username.sendKeys(userEmail);
@@ -33,6 +35,11 @@ public class UserLoginPage extends Utils {
         ProductCatalogue productCatalogue = new ProductCatalogue(driver);
         return productCatalogue;
 
+    }
+    
+    public String getErrorMessageText() {
+    	waitUntilElementIsVisible(InvalidEmailOrPasswordMsgLocator);
+    	return InvalidEmailOrPasswordMsgLocator.getText();
     }
 
     public void goTo(){

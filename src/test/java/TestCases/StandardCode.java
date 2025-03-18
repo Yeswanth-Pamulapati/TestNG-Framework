@@ -1,3 +1,4 @@
+package TestCases;
 import PageObjects.*;
 import TestComponents.BaseTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -21,20 +22,21 @@ import java.util.Properties;
 import static java.time.Duration.ofSeconds;
 
 public class StandardCode extends BaseTest {
+	public String productName = "ADIDAS ORIGINAL";
     @Test 
     public void submitOrder() throws IOException
     {
         //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\src\\test\\Resources\\msedgedriver.exe");
-    	UserLoginPage userLoginPage = launchApplcation();
+    	;
         //Go to Website
         //Login into the application
-        ProductCatalogue productCatalogue = userLoginPage.loginApplication(handleProperties().getProperty("username"),handleProperties().getProperty("password"));
+        ProductCatalogue productCatalogue = loginPage.loginApplication(handleProperties().getProperty("username"),handleProperties().getProperty("password"));
         //Add products to cart
-        productCatalogue.addProductToCart("ZARA COAT 3");
+        productCatalogue.addProductToCart(productName);
         //click on the cart button and open the cart page
         CartPage cartPage = productCatalogue.clickTheCart();
         //verify products on cart page.
-        Boolean productMatch = cartPage.verifyTheProductsInCart("ZARA COAT 3");
+        Boolean productMatch = cartPage.verifyTheProductsInCart(productName);
         Assert.assertTrue(productMatch);
         PaymentPage paymentPage = cartPage.clickTheCheckoutButton();
 //        driver.findElement(By.cssSelector("input[placeholder=\"Select Country\"]")).sendKeys("united");
@@ -51,7 +53,18 @@ public class StandardCode extends BaseTest {
         Boolean messageMatch = confirmationPage.verifyTheConfirmationMessage("Thankyou for the order.");
         Assert.assertTrue(messageMatch);
 
-
-
     }
+    
+    @Test(dependsOnMethods = {"submitOrder"})
+    public void verifyOrderHistory() throws IOException {
+    	ProductCatalogue productCatalogue = loginPage.loginApplication(handleProperties().getProperty("username"),handleProperties().getProperty("password"));
+        //Add products to cart
+        productCatalogue.addProductToCart(productName);
+        OrdersPage ordersPage = productCatalogue.clickonOrdersHeader();
+        Boolean isOrderPresent = ordersPage.verifyTheProductsOrderHistory(productName);
+        Assert.assertTrue(isOrderPresent);
+        
+        
+    }
+    
 }
