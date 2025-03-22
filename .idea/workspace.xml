@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="299de10c-6e2e-4c62-8367-b43c446b3593" name="Changes" comment="commit Testng first" />
+    <list default="true" id="299de10c-6e2e-4c62-8367-b43c446b3593" name="Changes" comment="commit Testng first">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/PageObjects/CartPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PageObjects/CartPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/PageObjects/OrderConfirmationPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PageObjects/OrderConfirmationPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/PageObjects/PaymentPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PageObjects/PaymentPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/PageObjects/ProductCatalogue.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PageObjects/ProductCatalogue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/PageObjects/UserLoginPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PageObjects/UserLoginPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/Utils.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,7 +47,11 @@
     "Application.StandAloneTest.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "TestNG.D:/workspace-eclipse/TestNG-Framework/SubmitOrder.xml.executor": "Run",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "21",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/1000074406/SeleniumCucumberFramework/TestNGFramework",
@@ -64,7 +77,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.StandardCode">
+  <component name="RunManager" selected="TestNG.D:/workspace-eclipse/TestNG-Framework/SubmitOrder.xml">
     <configuration name="StandAloneTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="StandAloneTest" />
       <module name="TestNGFramework" />
@@ -79,8 +92,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="D:/workspace-eclipse/TestNG-Framework/SubmitOrder.xml" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="TestNGFramework" />
+      <option name="SUITE_NAME" value="$PROJECT_DIR$/SubmitOrder.xml" />
+      <option name="TEST_OBJECT" value="SUITE" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="TestNG.D:/workspace-eclipse/TestNG-Framework/SubmitOrder.xml" />
         <item itemvalue="Application.StandardCode" />
         <item itemvalue="Application.StandAloneTest" />
       </list>

@@ -2,6 +2,131 @@
 2)PageObjects.initElements() used to tell the FindBy() annotation where to find the driver.
     i)initElements() expects two arguments which are driver and "this" keyword.
     ii)This key word represents the current instance or page.
-30 Page Objects contains locators and action methods which perform actions on a particular page.    
-3)Do not write assert statement within the page objects as we might be changing the assertion type from false to true or vice versa
+3) Page Objects contains locators and action methods which perform actions on a particular page.    
+4)Do not write assert statement within the page objects as we might be changing the assertion type from false to true or vice versa
 when required, so it is recommended to write assertions in test case class not page objects.   
+------------------------------------------------------->WAYS TO PASS TEST DATA <-------------------------------------------------------
+5)Ways to provide data to code
+	i) using a property file with .property extension which contains data in following format
+		username = Testdummy@gmail.com
+		password =  Dummy@123
+		browser= Edge
+		a) initialize properties class first
+		 	Properties properties = new Properties();
+		b)Inorder to feed the properties file to the load function of Properties class, we need to pass location of file in the File input stream format
+		    FileInputStream source = new FileInputStream(System.getProperty("user.dir 	")+"file location");
+		c)properties.load(source); // this loads the files and passes it to properties class
+		d) using properties.getProperty("browser") we can get the value assigned to the "browser" (a key) and use it.
+	ii)Second way is to use dataprovider method.
+		a)First create a method with @DataProvider annotation as follows
+			@DataProvider
+    		public Object[][] testDataProvider(){
+    		return new Object [][] {{"Testdummy@gmail.com","Dummy@123","ZARA COAT 3"},
+    				{"Testdummy@gmail.com","Dummy@123","ADIDAS ORIGINAL"},
+    				{"Testdummy@gmail.com","Dummy@123","Zebronic Headset"}};
+    		
+  			  }
+  		b) Now on the test method pass this data provider name to it's annotation and also pass the parameters to its method.	  
+  				@Test(dataProvider = "testDataProvider")
+    			public void submitOrder(String username, String password, String productName) throws IOException
+    	c)Just use the parameters passed to method to used the dataprovider values.
+    iii) if you have more data such as 15 sets, we can use hashmap with data provider as follows.
+    	a)Create a dataprovider method as follows,
+    		@DataProvider(name = "DataWithHashMap")
+    		public Object[][] testDataProviderWithHasMap(){
+    			HashMap<String,String> map1 = new HashMap<>();
+    			map1.put("username", "Testdummy@gmail.com");
+    			map1.put("password", "Dummy@123");
+    			map1.put("product", "ZARA COAT 3");
+    			HashMap<String,String> map2 = new HashMap<>();
+    			map2.put("username", "Testdummy@gmail.com");
+    			map2.put("password", "Dummy@123");
+    			map2.put("product", "ADIDAS ORIGINAL");
+    			return new Object[][]{{map1},{map2}};
+    	
+    				}	
+    	b) Here we have created a hashmap for each data set and returning them as Objects with set of maps.
+    	c)Now at the method where you use the data, assign the dataprovider method name to dataProvider attribute within its annotation	and
+    	pass the "HashMap<String,String> map" as parameter to the method.	
+    	d) now using map.get("givekeyvalue") we can access the data.
+    	e) As we have two sets of data, the code will run two times.
+    	
+    iv) Now creating a seperate hashmap for each set of data is not efficient as it takes space and creates a sort of confusion 
+    we can use JSON format.
+    	a) First of all create a file with .json extension and write the test data in it in the json format as follows,
+    		[ {
+   				 "username":"Testdummy@gmail.com",
+   				 "password":"Dummy@123",
+   				"product":"ZARA COAT 3"
+  			},]
+    	b)As json is a key value pair set of data, we need to use hashmap to consume the data. For that create a class and include a method to get data
+    	c) within the method "getJsonData()" first convert the data in the json file to string to read it, using the FileUtils class
+    				String JsonData = FileUtils.readFileToString(
+    									new File(System.getProperty("user.dir")
+    									+"\\src\\test\\Resources\\SubmitOrderTestData.json"),StandardCharsets.UTF_8);
+    	this reads the entire JSON file into a single String and it converts the file content into a text format, allowing further processing.							
+    	d)Next step is to convert this string of json data	to hashmap. To do this we need to get a new dependency called "jackson databind" from
+    	mvn repo. Add the following dependency to the pom file.
+    				<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+					<dependency>
+    				<groupId>com.fasterxml.jackson.core</groupId>
+    				<artifactId>jackson-databind</artifactId>
+    				<version>2.18.3</version>
+					</dependency>						
+		e)Now we need to convert json string to a list of hasmap. We need to use to Object mapper from jackson databind for this.
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper is a class in Jackson library that is used to convert JSON to Java objects (deserialization) 
+			and Java objects to JSON (serialization).
+		f)Now user mapper.readValue method to read the file content and within this method pass 
+		the json in form of string "JsonData" as first parameter
+		g)now the second parameter to pass should be the reference to the type we need to convert the file to.
+		TypeReference<T> is needed when working with generic types (like List<HashMap<String, String>>).
+		h)so to break it down we are converting the JSON object to a list of hashmaps using.
+				objMapper.readValue(jsonData,new TypeReference<List<HashMap<String, String>>>() {});
+          This readValue Method reads values in the form of second parameter.
+        j)Now store this in a variable to return the value.
+       	 	 List<HashMap<String, String>> dataMap = objMapper.readValue(jsonData,new TypeReference<List<HashMap<String, String>>>() {});
+                  
+		i)Create a dataprovider method with DataProvider annotation and do this
+					 @DataProvider
+					 public Object[][] getJsonData() throws IOException{
+						 List<HashMap<String, String>> data = getJsonTestData();
+						 return new Object[][] {{data.get(0)},{data.get(1)}};
+						 } 
+				
+        This does the same thing we did while we were passing each data set through a different hash map. This methods just converts the each set 
+        within the json file into an individual hashmap and it stores them all in a list and passed them as list of hashmaps.
+        
+------------------------------------------------>EXTENT REPORTS, LISTNERS AND SCREENSHOT ON FAILURE<-------------------------------------------------
+6)
+	i)First step for us to do is to get dependency for extent report from mvn repo and include it in POM file.
+	ii)The two important classess of extentreport we use here are "ExtentReports" and "ExtentSparkReporter"
+	iii)ExtentSparkReporter (duties & Purpose):
+			ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
+			a)ExtentSparkReporter is responsible for creating the actual report file in HTML format.
+			b)It allows us to define the report's file location (it takes path as argument), design, and theme.
+			c)It does not store any test information—it only manages the visual representation of reports.
+			d)To set Report name: 
+				sparkReporter.config().setReportName("Automation Test Report");
+			e)To set document title i.e, page title:
+			sparkReporter.config().setDocumentTitle("Test Execution Report");
+	iv)ExtentReports (duties & Purpose):
+			ExtentReports extent = new ExtentReports();
+			i)ExtentReports is the main class that collects test execution data.
+			ii)It stores test logs, pass/fail status, screenshots, and timestamps.
+			iii)It manages multiple reporters (e.g., Spark, Email, JSON).
+			iv)We need to attach the extentspark report configuration to the extent reports.
+				extent.attachReporter(sparkReporter);
+			v)createTest() is essential for logging individual test cases.It will keep monitering the test cases and waits for its result to generate and Displays pass/fail status
+				ExtentTest test = extent.createTest("Login Test");
+			vi)The setSystemInfo() method in ExtentReports is used to add system/environment details to the report.
+			 		extent.setSystemInfo("OS", System.getProperty("os.name"));
+        			extent.setSystemInfo("Browser", "Chrome 122");
+        			extent.setSystemInfo("Tester", "John Doe");
+       				extent.setSystemInfo("Environment", "QA");
+				such as OS: Windows 11
+						Browser: Chrome 122
+						Tester: John Doe
+						Environment: QA
+			vii)Generates the final report using flush().			
+					

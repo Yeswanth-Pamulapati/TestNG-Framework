@@ -11,32 +11,36 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
 import static java.time.Duration.ofSeconds;
+import static org.testng.Assert.fail;
 
 public class StandardCode extends BaseTest {
 	public String productName = "ADIDAS ORIGINAL";
-    @Test 
-    public void submitOrder() throws IOException
+    @Test(dataProvider = "getJsonData")
+    public void submitOrder(HashMap<String, String> dataMap) throws IOException
     {
         //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\src\\test\\Resources\\msedgedriver.exe");
     	;
         //Go to Website
         //Login into the application
-        ProductCatalogue productCatalogue = loginPage.loginApplication(handleProperties().getProperty("username"),handleProperties().getProperty("password"));
-        //Add products to cart
-        productCatalogue.addProductToCart(productName);
+       // ProductCatalogue productCatalogue = loginPage.loginApplication(handleProperties().getProperty("username"),handleProperties().getProperty("password"));
+    	ProductCatalogue productCatalogue = loginPage.loginApplication(dataMap.get("username"),dataMap.get("password"));
+    	//Add products to cart
+        productCatalogue.addProductToCart(dataMap.get("product"));
         //click on the cart button and open the cart page
         CartPage cartPage = productCatalogue.clickTheCart();
         //verify products on cart page.
-        Boolean productMatch = cartPage.verifyTheProductsInCart(productName);
+        Boolean productMatch = cartPage.verifyTheProductsInCart(dataMap.get("product"));
         Assert.assertTrue(productMatch);
         PaymentPage paymentPage = cartPage.clickTheCheckoutButton();
 //        driver.findElement(By.cssSelector("input[placeholder=\"Select Country\"]")).sendKeys("united");
@@ -50,21 +54,24 @@ public class StandardCode extends BaseTest {
         //place the order
         OrderConfirmationPage confirmationPage = paymentPage.placeTheOrder();
         //verify the confirmation message displayed on the final page.
-        Boolean messageMatch = confirmationPage.verifyTheConfirmationMessage("Thankyou for the order.");
+        Boolean messageMatch = confirmationPage.verifyTheConfirmationMessage("Thanyou for the order.");
         Assert.assertTrue(messageMatch);
 
     }
     
-    @Test(dependsOnMethods = {"submitOrder"})
-    public void verifyOrderHistory() throws IOException {
-    	ProductCatalogue productCatalogue = loginPage.loginApplication(handleProperties().getProperty("username"),handleProperties().getProperty("password"));
+    @Test(dependsOnMethods = {"submitOrder"}, dataProvider = "getJsonData")
+    public void verifyOrderHistory(HashMap<String, String> dataMap) throws IOException {
+    	ProductCatalogue productCatalogue = loginPage.loginApplication(dataMap.get("username"),dataMap.get("password"));
         //Add products to cart
-        productCatalogue.addProductToCart(productName);
+        //productCatalogue.addProductToCart(dataMap.get("product"));
         OrdersPage ordersPage = productCatalogue.clickonOrdersHeader();
-        Boolean isOrderPresent = ordersPage.verifyTheProductsOrderHistory(productName);
+        Boolean isOrderPresent = ordersPage.verifyTheProductsOrderHistory(dataMap.get("product"));
         Assert.assertTrue(isOrderPresent);
         
         
     }
+    
+    
+   
     
 }
